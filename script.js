@@ -51,7 +51,6 @@ budgetDay = accumulatedMonth / 30;
 function getTargetMonth(){
     return mission / accumulatedMonth;
 }
-//Результат выше надо округлить
 
 console.log('money', showTypeOf(money));
 console.log('income', showTypeOf(income));
