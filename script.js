@@ -52,6 +52,14 @@ function getTargetMonth(){
     return mission / accumulatedMonth;
 }
 
+/*3) Если getTargetMonth возвращает нам отрицательное значение,
+то вместо “Цель будет достигнута” необходимо выводить “Цель не будет достигнута”*/
+if (getTargetMonth() >= 0){
+    console.log('Цель будет достигнута');
+} else {
+    console.log('Цель не будет достигнута');
+}
+
 console.log('money', showTypeOf(money));
 console.log('income', showTypeOf(income));
 console.log('deposit', showTypeOf(deposit));
@@ -60,3 +68,16 @@ console.log('возможные расходы', addExpenses.toLowerCase().split
 console.log('срок достижения цели', Math.ceil(getTargetMonth()));
 console.log('бюджет на день', budgetDay);
 console.log(getStatusIncome());
+/* 2) Добавить проверку что введённые данные являются числом,
+которые мы получаем на вопрос 'Во сколько это обойдется?’ в функции  getExpensesMonth*/
+console.log(typeof(getExpensesMonth));
+
+
+
+/* Вариатн цикла
+do {
+    console.log(mission);
+    mission++;
+}
+while(mission < 100000);
+*/
