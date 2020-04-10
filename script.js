@@ -93,3 +93,11 @@ appData.getExpensesMonth();
 appData.getAccumulatedMonth();
 appData.getTargetMonth();
 appData.getStatusIncome();
+
+// 12 вывести в консоль
+// расходы за месяц
+console.log(appData.expenses);
+// за какой период будет достигнута цель
+console.log(appData.period);
+// уровень дохода
+console.log(appData.budgetMonth);
