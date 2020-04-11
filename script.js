@@ -13,7 +13,7 @@ let isNumber = function(n) {
 };
 
 let start = function() {
-    money = +prompt('Ваш месячный доход?');
+    money = +prompt('Ваш месячный доход?', 50000);
     
     while (!isNumber(money)) {
         money = +prompt('Ваш месячный доход?');
@@ -29,6 +29,10 @@ let appData = {
     expenses: {},
     addExpenses: [],
     deposit: false,
+    // процент депозита
+    percentDeposit: 0,
+    // сколько денег положил на депозит
+    moneyDeposit: 0,
     mission: 100000,
     period: 12,
     budgetDay: 0,
@@ -36,6 +40,16 @@ let appData = {
     expensesMonth: 0,
 
     asking: function(){
+
+        // есть ли у пользователя есть
+        //дополнительный заработок
+        if(confirm('Есть ли у вас дополнительный источник заработка?')){
+            let itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
+            let cashIncome = +prompt('Сколько в месяц вы за это получаете?', 10000);
+            // сохраняем результат (cashIncome) из переменной itemIncome
+            appData.income[itemIncome] = cashIncome;
+        }
+
         let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
         appData.addExpenses = addExpenses.toLowerCase().split(', ');
         appData.deposit = confirm('Есть ли у вас депозит в банке?');
@@ -55,7 +69,7 @@ let appData = {
     },
 
     getExpensesMonth: function() {
-        console.log(appData.expenses);
+        // console.log(appData.expenses);
         // for - запускаем цикл
         // let key - перебирая каждый ключ в appData.expenses
         for(let key in appData.expenses) {
@@ -84,8 +98,22 @@ let appData = {
         } else if (budgetDay <= 0) {
             return ('Что-то пошло не так');
         }
-    }
+    },
 
+    // этот метод записывает цифры по депозиту в 33 и 35 строки
+    getInfoDeposit: function(){
+        // если appData.deposit - это true
+        if (appData.deposit) {
+            appData.percentDeposit = +prompt('Какой годовой процент у вас по депозиту?', 10);
+            appData.moneyDeposit = +prompt('Какая сумма заложена?', 10000);
+        }
+    },
+    //считаем, сколько заработаем за период (37 строка)
+    calcSavedMoney: function(){
+        // разобраться, почему в консоли не то
+        // проверить еще раз в консоли
+        return appData.budgetMonth * appData.period;
+    }
 };
 //тут по очереди вызывать мои методы
 appData.asking();
@@ -94,6 +122,16 @@ appData.getAccumulatedMonth();
 appData.getTargetMonth();
 appData.getStatusIncome();
 
+console.log('Расходы за месяц: ' + appData.expensesMonth);
+
+if (appData.getTargetMonth() > 0) {
+    console.log('Цель будет достигнута за ' + Math.ceil(appData.getTargetMonth()) + ' месяца');
+} else {
+    console.log('Цель не будет достигнута');
+}
+
+console.log(appData.getStatusIncome());
+
 // 12 вывести в консоль
 // расходы за месяц
 console.log(appData.expenses);
@@ -101,3 +139,17 @@ console.log(appData.expenses);
 console.log(appData.period);
 // уровень дохода
 console.log(appData.budgetMonth);
+
+// для проверки
+
+appData.getInfoDeposit();
+console.log(appData.percentDeposit, appData.moneyDeposit, appData.calcSavedMoney);
+
+// ДОМАШНЕЕ ЗАДАНИЕ
+
+// проверить данные в:
+// itemExpenses, itemIncome, cashIncome, percentDeposit, moneyDeposit
+
+// вывести в консоль возможные доходы и расходы в виде строки
+// каждое слово должно начинаться с большой буквы
+//слова разделены запятой и пробелом
