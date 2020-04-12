@@ -1,9 +1,6 @@
 'use strict';
 //эти переменные в конце почистить
 let money,
-expenses1,
-expenses2,
-accumulatedMonth,
 budgetDay; //возможно, придется удалить
 // проверка на число
 let isNumber = function(n) {
