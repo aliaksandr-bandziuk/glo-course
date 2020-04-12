@@ -159,4 +159,4 @@ console.log(appData.expenses);
 console.log(appData.period);
 // уровень дохода
 console.log(appData.budgetMonth);
-console.log('Возможные доходы: ', appData.addExpenses);
+console.log('возможные доходы: ', appData.addExpenses);
