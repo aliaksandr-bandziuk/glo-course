@@ -5,79 +5,23 @@
 
 'use strict';
 
-// Кнопку "Рассчитать" через id
-let buttonStart = document.getElementById('start');
-console.log(buttonStart);
-
-
-// Кнопки “+” (плюс) через Tag, каждую в своей переменной.
-let buttonPlus0 = document.getElementsByTagName('button')[0];
-console.log(buttonPlus0);
-let buttonPlus1 = document.getElementsByTagName('button')[1];
-console.log(buttonPlus1);
-
-// Чекбокс по id через querySelector
-// подумать, как это сделать грамотно
-let inputDepositCheck = document.querySelector('#deposit-check');
-console.log(inputDepositCheck);
-
-// Поля для ввода возможных доходов (additional_income-item) при помощи querySelectorAll
-// точно ли это правильно?
-let additionalIncomeItem = document.querySelectorAll('.additional_income-item');
-console.log(additionalIncomeItem);
-
-// Каждый элемент в правой части программы через класс,
-// которые имеют в имени класса "-value", начиная с
-// class="budget_day-value" и заканчивая class="target_month-value">
-// console.log(document.querySelectorAll('.salary'));
-let budgetDayValue = document.querySelector('.budget_day-value');
-console.log(budgetDayValue);
-let expensesMonthValue = document.querySelector('.expenses_month-value');
-console.log(expensesMonthValue);
-let additionalIncomeValue = document.querySelector('.additional_income-value');
-console.log(additionalIncomeValue);
-let additionalExpensesValue = document.querySelector('.additional_expenses-value');
-console.log(additionalExpensesValue);
-let incomePeriodValue = document.querySelector('.income_period-value');
-console.log(incomePeriodValue);
-let targetMonthValue = document.querySelector('.target_month-value');
-console.log(targetMonthValue);
-
-// Оставшиеся поля через querySelector каждый в отдельную переменную:
-// поля ввода (input) с левой стороны и не забудьте про range.
-
-// месячный доход (сумма)
-let inputSalaryAmount = document.querySelector('.salary-amount');
-console.log(inputSalaryAmount);
-
-// дополнительный доход (наименование)
-let inputIncomeTitle = document.querySelector('.income-title');
-console.log(inputIncomeTitle);
-
-// дополнительный доход (сумма)
-let inputIncomeAmount = document.querySelector('.income-amount');
-console.log(inputIncomeAmount);
-
-// возможный доход
-let additionalIncomeItems = document.querySelector('.additional_income-item');
-console.log(additionalIncomeItems);
-
-// обязательные расходы (наименование)
-let inputExpensesTitle = document.querySelector('.expenses-title');
-console.log(inputExpensesTitle);
-
-// обязательные расходы (сумма)
-let inputExpensesAmount = document.querySelector('.expenses-amount');
-console.log(inputExpensesAmount);
-
-// возможные расходы
-let additionalExpensesItem = document.querySelector('.additional_expenses-item');
-console.log(additionalExpensesItem);
-
-//депозит (цель)
-let inputTargetAmount = document.querySelector('.target-amount');
-console.log(inputTargetAmount);
-
-// период расчета
-let periodSelectRange = document.querySelector('.period-select');
-console.log(periodSelectRange);
+let buttonStart = document.getElementById('start'),
+ buttonPlus0 = document.getElementsByTagName('button')[0],
+ buttonPlus1 = document.getElementsByTagName('button')[1],
+ inputDepositCheck = document.querySelector('#deposit-check'),
+ additionalIncomeItem = document.querySelectorAll('.additional_income-item'),
+ budgetDayValue = document.getElementsByClassName('budget_day-value')[0],
+ expensesMonthValue = document.getElementsByClassName('expenses_month-value')[0],
+ additionalIncomeValue = document.getElementsByClassName('additional_income-value')[0],
+ additionalExpensesValue = document.getElementsByClassName('additional_expenses-value')[0],
+ incomePeriodValue = document.getElementsByClassName('income_period-value')[0],
+ targetMonthValue = document.getElementsByClassName('target_month-value')[0],
+ inputSalaryAmount = document.querySelector('.salary-amount'),
+ inputIncomeTitle = document.querySelector('.income-title'),
+ inputIncomeAmount = document.querySelector('.income-amount'),
+ additionalIncomeItems = document.querySelector('.additional_income-item'),
+ inputExpensesTitle = document.querySelector('.expenses-title'),
+ inputExpensesAmount = document.querySelector('.expenses-amount'),
+ additionalExpensesItem = document.querySelector('.additional_expenses-item'),
+ inputTargetAmount = document.querySelector('.target-amount'),
+ periodSelectRange = document.querySelector('.period-select');
