@@ -72,7 +72,7 @@ let appData = {
         for (let i = 0; i < 2; i++) {
             str = prompt('Введите обязательную статью расходов');
             while (isNumber(str) || str === null || str === false){
-                addExpenses = prompt('Введите обязательную статью расходов');
+                str = prompt('Введите обязательную статью расходов');
             }
             count = prompt('Во сколько это обойдется?');
             while (!isNumber(count) || count === null || count === false){
