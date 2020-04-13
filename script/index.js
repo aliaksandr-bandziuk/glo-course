@@ -6,8 +6,8 @@
 'use strict';
 
 // Кнопку "Рассчитать" через id
-let start = document.getElementById('start');
-console.log(start);
+let buttonStart = document.getElementById('start');
+console.log(buttonStart);
 
 
 // Кнопки “+” (плюс) через Tag, каждую в своей переменной.
