@@ -59,4 +59,63 @@ const chapterClone = chapters[5].cloneNode(true);
 // стало: http://prntscr.com/rylmsq
 collections[0].prepend(chapterClone);
 
-// продолжить с 11:21
+// пример как добавить новый класс
+// как выглядит: http://prntscr.com/rz2hy7
+chapterClone.classList.add('book');
+
+// меняем текст
+// как выглядит: http://prntscr.com/rz2j7s
+chapterClone.textContent = 'меняю текст через JS';
+
+// как создать элемент
+chapters[9].textContent = 'Привет';
+
+// создаем HTML-тег
+// этот способ затирает предыдущую разметку
+// так можно удалить вообще все, что было сверстано
+chapters[8].innerHTML = '<h3>Приветос!</h3>';
+
+// лучше прямо создать элемент
+// вот так
+
+const newElem = document.createElement('li');
+
+// добавляем новый элемент в коллекцию
+collections[1].append('newElem');
+//добавляем этому новому элементу текст
+newElem.textContent = 'Новый элемент';
+// так же можно менять классы, свойства, атрибуты и др.
+
+
+// метод, который вставляет текст
+// и он никогда не затирает тот текст, что есть внутри
+
+// сначала объявляем переменную для нужного текста
+// и записываем в нее нужное значение
+const secondHead = document.getElementById('second-head');
+
+// обращаемся к переменной
+// этот элемент принимает два параметра:
+// 1 - описание того места, в который мы можем вставить текст
+// 2 - сам текст, который мы будем вставлять
+
+// вставляем ДО нужного текста
+secondHead.insertAdjacentText('beforebegin', 'beforebegin');
+// вставляем ПОСЛЕ нужного текста
+secondHead.insertAdjacentText('afterend', 'afterend');
+// вставляем ВНУТРИ ТЕГА ДО нужного текста (после начала)
+secondHead.insertAdjacentText('afterbegin', 'afterbegin');
+// вставляем ВНУТРИ ТЕГА ПОСЛЕ нужного текста (перед концом)
+secondHead.insertAdjacentText('beforeend', 'beforeend');
+
+// вставляем нужный ЭЛЕМЕНТ
+secondHead.insertAdjacentElement('beforebegin', chapters[0]);
+secondHead.insertAdjacentElement('afterend', chapters[1]);
+secondHead.insertAdjacentElement('afterbegin', chapters[2]);
+secondHead.insertAdjacentElement('beforeend', chapters[3]);
+
+// вставляем HTML-разметку
+secondHead.insertAdjacentHTML('beforebegin', '<h3>beforebegin</h3>');
+secondHead.insertAdjacentHTML('afterend', '<h3>afterend</h3>');
+secondHead.insertAdjacentHTML('afterbegin', '<p>afterbegin</p>');
+secondHead.insertAdjacentHTML('beforeend', '<p>beforeend</p>');
