@@ -36,5 +36,8 @@ liFive[4].after(liFive[2]);
 liFive[8].before(liFive[5]);
 
 // в шестой книге добавить главу “Глава 8: За пределами ES6” и поставить её в правильное место
-book[2].append('newChapter');
-newChapter.textContent = 'Глава 8: За пределами ES6';
+let ulSix = book[2].querySelector('ul');
+ulSix.innerHTML += '<li>Глава 8: За пределами ES6</li>';
+
+let liSix = book[2].querySelectorAll('li');
+liSix[8].after(liSix[10]);
