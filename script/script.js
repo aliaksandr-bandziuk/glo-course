@@ -6,6 +6,7 @@ let buttonStart = document.getElementById('start'),
  inputDepositCheck = document.querySelector('#deposit-check'),
  additionalIncomeItem = document.querySelectorAll('.additional_income-item'),
  budgetDayValue = document.getElementsByClassName('budget_day-value')[0],
+ budgetMonthValue = document.getElementsByClassName('budget_month-value')[0],
  expensesMonthValue = document.getElementsByClassName('expenses_month-value')[0],
  additionalIncomeValue = document.getElementsByClassName('additional_income-value')[0],
  additionalExpensesValue = document.getElementsByClassName('additional_expenses-value')[0],
@@ -42,7 +43,6 @@ let appData = {
     percentDeposit: 0,
     // сколько денег положил на депозит
     moneyDeposit: 0,
-    mission: 100000,
     period: 12,
     // эта функция раньше была выше, до appData
     start: function() {
@@ -55,20 +55,40 @@ let appData = {
         
         // присваиваю значение инпута "месячный доход" в budget
         appData.budget = inputSalaryAmount.value;
-        console.log('inputSalaryAmount.value: ', inputSalaryAmount.value);
+        //console.log('inputSalaryAmount.value: ', inputSalaryAmount.value);
+
+        // тут надо вызвать метод getExpenses
+        // зачем? он же ниже
+        appData.getExpenses();
 
 
         // было в строке "тут по очереди вызывать мои методы"
-        // appData.asking();
-        // appData.getExpensesMonth();
-        // appData.getAccumulatedMonth();
-        // appData.getTargetMonth();
-        // appData.getStatusIncome();
+
+        appData.getExpenses();
+        appData.getExpensesMonth();
+        appData.getBudget();
+        appData.getAccumulatedMonth();
+        appData.getTargetMonth();
+        appData.getStatusIncome();
+        //appData.budgetMonth();
+        appData.showResult();
+        appData.getAddExpenses();
+        appData.getAddIncome();
 
     },
     budgetDay: 0,
     budgetMonth: 0,
     expensesMonth: 0,
+
+    // выводим результаты всех вычислений
+    showResult: function(){
+        budgetMonthValue.value = appData.budgetMonth;
+        budgetDayValue.value = appData.budgetDay;
+        expensesMonthValue.value = expensesMonth;
+        additionalExpensesValue.value = appData.addExpenses.join(', ');
+        additionalIncomeValue.value = appData.addIncome.join(', ');
+        targetMonthValue.value = Math.ceil(appData.getTargetMonth()); //округлили в большую сторону
+    },
 
     // создаем метод, который добавляет новые поля
     // при нажатии на плюс
@@ -89,6 +109,53 @@ let appData = {
             /// тогда скрываем кнопку с плюсом
             buttonPlus1.style.display = 'none';
         }
+    },
+
+    //необходимо получить все расходы и записать все значения в объект
+    getExpenses: function(){
+        // перебираем элементы внутри expensesItems
+        expensesItems.forEach(function(item){
+            //console.log(item);
+            // надо получить значение инпутов и записать их в объект expenses
+            let itemExpenses = item.querySelector('.expenses-title').value;
+            let cashExpenses = item.querySelector('.expenses-amount').value;
+            // если переменные выше не равны пустой строке...
+            if(itemExpenses !== '' && cashExpenses !== ''){
+                // ...тогда мы в appDataExpenses записываем itemExpenses
+                // то есть itemExpenses будет ключом...
+                // а cashExpenses станет значением
+                appData.expenses[itemExpenses] = cashExpenses;
+            }
+        });
+    },
+
+    // добавить функцию возможных расходов
+    // (а потом — доходов) - это уже самостоятельно
+    getAddExpenses: function(){
+        // split - значит сделать из элемента массив
+        // (',') - значит получить все элементы через запятую
+        let addExpenses = additionalExpensesItem.value.split(',');
+        // теперь перебираем массив
+        addExpenses.forEach(function(item){
+            // trim - убирает пробелы в начале и в конце
+            item = item.trim();
+            //каждый элемент внутри массива проверяем на пустоту
+            if(item !== ''){
+                // тогда добавляем в addExpenses с помощью push
+                appData.addExpenses.push(item);
+            }
+
+        });
+    },
+
+    getAddIncome: function(){
+        additionalIncomeItem.forEach(function(item){
+            let itemValue = item.value.trim();
+            if (itemValue !== ''){
+                // то записываем значение сюда
+                appData.addIncome.push(itemValue);
+            }
+        });
     },
 
     asking: function () {
@@ -119,25 +186,6 @@ let appData = {
         }
         appData.addExpenses = addExpenses.toUpperCase().split(', ');
         appData.deposit = confirm('Есть ли у вас депозит в банке?');
-
-        // объявляю, чтобы использовать в цикле ниже
-        // полученные значения потом пойдут выше
-        let str, count;
-
-        for (let i = 0; i < 2; i++) {
-            str = prompt('Введите обязательную статью расходов');
-            while (isNumber(str) || str === null || str === false){
-                str = prompt('Введите обязательную статью расходов');
-            }
-            count = prompt('Во сколько это обойдется?');
-            while (!isNumber(count) || count === null || count === false){
-                count = prompt('Во сколько это обойдется?');
-            }
-
-            // результат вопросов записываем в expenses по способу "свойство: значение"
-            // плюс переносим в count из prompt. так не будет багов
-            appData.expenses[str] = +count;
-        }
     },
 
     getExpensesMonth: function() {
@@ -156,8 +204,13 @@ let appData = {
         appData.budgetDay = appData.budgetMonth / 30;
     },
 
+    getBudget: function(){
+        appData.budgetMonth = appData.budget - appData.expensesMonth;
+        appData.budgetDay = appData.budgetMonth / 30;
+    },
+
     getTargetMonth: function(){
-        return appData.mission / appData.budgetMonth;
+        return inputTargetAmount.value / appData.budgetMonth;
     },
 
     getStatusIncome: function(){
@@ -197,11 +250,11 @@ buttonPlus1.addEventListener('click', appData.addExpensesBlock);
 
 //тут по очереди вызывать мои методы
 
-if (appData.getTargetMonth() > 0) {
-    console.log('Цель будет достигнута за ' + Math.ceil(appData.getTargetMonth()) + ' месяца');
-} else {
-    console.log('Цель не будет достигнута');
-}
+// if (appData.getTargetMonth() > 0) {
+//     console.log('Цель будет достигнута за ' + Math.ceil(appData.getTargetMonth()) + ' месяца');
+// } else {
+//     console.log('Цель не будет достигнута');
+// }
 
 // это все потом удалить
 // // 12 вывести в консоль
