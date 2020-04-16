@@ -19,6 +19,7 @@ let buttonStart = document.getElementById('start'),
  inputExpensesTitle = document.querySelector('.expenses-title'),
  expensesItems = document.querySelectorAll('.expenses-items'),
  // inputExpensesAmount = document.querySelector('.expenses-amount'),
+ additionalIncome = document.querySelectorAll('.additional_income'),
  additionalExpensesItem = document.querySelector('.additional_expenses-item'),
  inputTargetAmount = document.querySelector('.target-amount'),
  periodSelect = document.querySelector('.period-select'),
@@ -35,7 +36,6 @@ let budgetDay;
 
 let appData = {
     budget: 0,
-    budgetDay: 0,
     budgetMonth: 0,
     expensesMonth: 0,
     income: {},
@@ -84,7 +84,9 @@ let appData = {
     // выводим результаты всех вычислений
     showResult: function(){
         budgetMonthValue.value = appData.budgetMonth;
-        budgetDayValue.value = appData.budgetDay;
+        // Округлить вывод дневного бюджета
+        // budgetDayValue = (appData.budgetDay);
+        budgetDay.value = Math.floor(appData.getBudget());
         expensesMonthValue.value = appData.expensesMonth;
         additionalExpensesValue.value = appData.addExpenses.join(', ');
         additionalIncomeValue.value = appData.addIncome.join(', ');
@@ -113,6 +115,16 @@ let appData = {
         }
     },
 
+    // Создать метод addIncomeBlock аналогичный addExpensesBlock
+    addIncomeBlock: function(){
+        let additionalIncome = document.querySelectorAll('.additional_income');
+        let cloneAdditionalIncome = additionalIncome[0].cloneNode(true);
+        additionalIncome[0].parentNode.insertBefore(cloneAdditionalIncome, buttonPlus0);
+        if(additionalIncome.length === 2){
+            buttonPlus0.style.display = 'none';
+        }
+    },
+
     //необходимо получить все расходы и записать все значения в объект
     getExpenses: function(){
         // перебираем элементы внутри expensesItems
@@ -130,36 +142,16 @@ let appData = {
             }
         });
     },
-    // этот метод выполняет те же действия, что и getExpenses, только с доходами
+    // Переписать метод getIncome аналогично getExpenses
     getIncome: function(){
-        // В ДЗ НАДО БУДЕТ СДЕЛАТЬ КАК В getExpenses (МЕТОД СРАЗУ ВЫШЕ)!!!!!!!
-        // И УБРАТЬ ЦИКЛ НИЖЕ
-
-        // есть ли у пользователя
-        //дополнительный заработок
-        if(confirm('Есть ли у вас дополнительный источник заработка?')){
-            let itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
-            while (isNumber(itemIncome) || itemIncome === null || itemIncome === false){
-                itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
+        incomeItem.forEach(function(item){
+            let incomeTitle = item.querySelector('.income-title').value;
+            let incomeAmount = item.querySelector('.income-amount').value;
+            
+            if(incomeTitle !== '' && incomeAmount !== ''){
+                appData.income[incomeTitle] = incomeAmount;
             }
-            // почему не работает код ниже???
-            // while (isNumber(itemIncome) || itemIncome === null || itemIncome === false) {
-            //     alert('Напишите буквами');
-            //     let itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
-            // }
-            let cashIncome = +prompt('Сколько в месяц вы за это получаете?', 10000);
-            while (!isNumber(cashIncome) || cashIncome === null || cashIncome === false){
-                cashIncome = +prompt('Сколько в месяц вы за это получаете?', 10000);
-            }
-            // сохраняем результат (cashIncome) из переменной itemIncome
-            appData.income[itemIncome] = cashIncome;
-        }
-
-        //и это тоже поом удалить
-        for (let key in appData.income){
-            //перебираем все значения про сколько вы зарабатываете и суммируем их в incomeMonth
-            appData.incomeMonth += +appData.income[key];
-        }
+        });    
     },
 
     // добавить функцию возможных расходов
@@ -249,22 +241,5 @@ buttonStart.addEventListener('click', appData.start);
 
 // обработчик события кнопке "плюс"
 // по клику вызывается функция из appData.addExpensesBlock
+buttonPlus0.addEventListener('click', appData.addIncomeBlock);
 buttonPlus1.addEventListener('click', appData.addExpensesBlock);
-
-//тут по очереди вызывать мои методы
-
-// if (appData.getTargetMonth() > 0) {
-//     console.log('Цель будет достигнута за ' + Math.ceil(appData.getTargetMonth()) + ' месяца');
-// } else {
-//     console.log('Цель не будет достигнута');
-// }
-
-// это все потом удалить
-// // 12 вывести в консоль
-// // расходы за месяц
-// console.log(appData.expenses);
-// // за какой период будет достигнута цель
-// console.log(appData.period);
-// // уровень дохода
-// console.log(appData.budgetMonth);
-// console.log('Возможные доходы: ', appData.addExpenses);
