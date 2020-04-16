@@ -21,7 +21,8 @@ let buttonStart = document.getElementById('start'),
  // inputExpensesAmount = document.querySelector('.expenses-amount'),
  additionalExpensesItem = document.querySelector('.additional_expenses-item'),
  inputTargetAmount = document.querySelector('.target-amount'),
- periodSelectRange = document.querySelector('.period-select');
+ periodSelect = document.querySelector('.period-select'),
+ incomeItem = document.querySelectorAll('.income-items');
 
 // проверка на число
 let isNumber = function(n) {
@@ -34,7 +35,11 @@ let budgetDay;
 
 let appData = {
     budget: 0,
+    budgetDay: 0,
+    budgetMonth: 0,
+    expensesMonth: 0,
     income: {},
+    incomeMonth: 0,
     addIncome: [],
     expenses: {},
     addExpenses: [],
@@ -43,7 +48,6 @@ let appData = {
     percentDeposit: 0,
     // сколько денег положил на депозит
     moneyDeposit: 0,
-    period: 12,
     // эта функция раньше была выше, до appData
     start: function() {
 
@@ -54,7 +58,7 @@ let appData = {
         }
         
         // присваиваю значение инпута "месячный доход" в budget
-        appData.budget = inputSalaryAmount.value;
+        appData.budget = +inputSalaryAmount.value;
         //console.log('inputSalaryAmount.value: ', inputSalaryAmount.value);
 
         // тут надо вызвать метод getExpenses
@@ -65,29 +69,27 @@ let appData = {
         // было в строке "тут по очереди вызывать мои методы"
 
         appData.getExpenses();
+        appData.getIncome();
         appData.getExpensesMonth();
-        appData.getBudget();
         appData.getAccumulatedMonth();
+        appData.getAddExpenses();
+        appData.getAddIncome();
+        appData.getBudget();
         appData.getTargetMonth();
         appData.getStatusIncome();
         //appData.budgetMonth();
         appData.showResult();
-        appData.getAddExpenses();
-        appData.getAddIncome();
-
     },
-    budgetDay: 0,
-    budgetMonth: 0,
-    expensesMonth: 0,
-
+    
     // выводим результаты всех вычислений
     showResult: function(){
         budgetMonthValue.value = appData.budgetMonth;
         budgetDayValue.value = appData.budgetDay;
-        expensesMonthValue.value = expensesMonth;
+        expensesMonthValue.value = appData.expensesMonth;
         additionalExpensesValue.value = appData.addExpenses.join(', ');
         additionalIncomeValue.value = appData.addIncome.join(', ');
         targetMonthValue.value = Math.ceil(appData.getTargetMonth()); //округлили в большую сторону
+        incomePeriodValue.value = appData.calcSavedMoney();
     },
 
     // создаем метод, который добавляет новые поля
@@ -128,6 +130,37 @@ let appData = {
             }
         });
     },
+    // этот метод выполняет те же действия, что и getExpenses, только с доходами
+    getIncome: function(){
+        // В ДЗ НАДО БУДЕТ СДЕЛАТЬ КАК В getExpenses (МЕТОД СРАЗУ ВЫШЕ)!!!!!!!
+        // И УБРАТЬ ЦИКЛ НИЖЕ
+
+        // есть ли у пользователя
+        //дополнительный заработок
+        if(confirm('Есть ли у вас дополнительный источник заработка?')){
+            let itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
+            while (isNumber(itemIncome) || itemIncome === null || itemIncome === false){
+                itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
+            }
+            // почему не работает код ниже???
+            // while (isNumber(itemIncome) || itemIncome === null || itemIncome === false) {
+            //     alert('Напишите буквами');
+            //     let itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
+            // }
+            let cashIncome = +prompt('Сколько в месяц вы за это получаете?', 10000);
+            while (!isNumber(cashIncome) || cashIncome === null || cashIncome === false){
+                cashIncome = +prompt('Сколько в месяц вы за это получаете?', 10000);
+            }
+            // сохраняем результат (cashIncome) из переменной itemIncome
+            appData.income[itemIncome] = cashIncome;
+        }
+
+        //и это тоже поом удалить
+        for (let key in appData.income){
+            //перебираем все значения про сколько вы зарабатываете и суммируем их в incomeMonth
+            appData.incomeMonth += +appData.income[key];
+        }
+    },
 
     // добавить функцию возможных расходов
     // (а потом — доходов) - это уже самостоятельно
@@ -158,36 +191,6 @@ let appData = {
         });
     },
 
-    asking: function () {
-
-        // есть ли у пользователя
-        //дополнительный заработок
-        if(confirm('Есть ли у вас дополнительный источник заработка?')){
-            let itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
-            while (isNumber(itemIncome) || itemIncome === null || itemIncome === false){
-                itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
-            }
-            // почему не работает код ниже???
-            // while (isNumber(itemIncome) || itemIncome === null || itemIncome === false) {
-            //     alert('Напишите буквами');
-            //     let itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');
-            // }
-            let cashIncome = +prompt('Сколько в месяц вы за это получаете?', 10000);
-            while (!isNumber(cashIncome) || cashIncome === null || cashIncome === false){
-                cashIncome = +prompt('Сколько в месяц вы за это получаете?', 10000);
-            }
-            // сохраняем результат (cashIncome) из переменной itemIncome
-            appData.income[itemIncome] = cashIncome;
-        }
-
-        let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
-        while (isNumber(addExpenses) || addExpenses === null || addExpenses === false){
-            addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
-        }
-        appData.addExpenses = addExpenses.toUpperCase().split(', ');
-        appData.deposit = confirm('Есть ли у вас депозит в банке?');
-    },
-
     getExpensesMonth: function() {
         // console.log(appData.expenses);
         // for - запускаем цикл
@@ -205,7 +208,7 @@ let appData = {
     },
 
     getBudget: function(){
-        appData.budgetMonth = appData.budget - appData.expensesMonth;
+        appData.budgetMonth = appData.budget + appData.incomeMonth - appData.expensesMonth;
         appData.budgetDay = appData.budgetMonth / 30;
     },
 
@@ -237,7 +240,7 @@ let appData = {
     calcSavedMoney: function(){
         // разобраться, почему в консоли не то
         // проверить еще раз в консоли
-        return appData.budgetMonth * appData.period;
+        return appData.budgetMonth * periodSelect.value;
     }
 };
 
