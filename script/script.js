@@ -23,7 +23,8 @@ let buttonStart = document.getElementById('start'),
  additionalExpensesItem = document.querySelector('.additional_expenses-item'),
  inputTargetAmount = document.querySelector('.target-amount'),
  periodSelect = document.querySelector('.period-select'),
- incomeItem = document.querySelectorAll('.income-items');
+ incomeItem = document.querySelectorAll('.income-items'),
+ periodAmount = document.querySelector('.period-amount');
 
 // проверка на число
 let isNumber = function(n) {
@@ -52,6 +53,10 @@ let appData = {
         if (inputSalaryAmount.value.trim() === '') {
             return;
         }
+
+        // if (inputSalaryAmount.value === '') {
+        //     buttonStart.disabled = true;
+        // }
 
         // ПОЧЕМУ МОЖЕТ НЕ РАБОТАТЬ ЭТО?
         // еще могу циклом написать
@@ -90,6 +95,10 @@ let appData = {
         additionalIncomeValue.value = appData.addIncome.join(', ');
         targetMonthValue.value = Math.ceil(appData.getTargetMonth()); //округлили в большую сторону
         incomePeriodValue.value = appData.calcSavedMoney();
+        periodSelect.addEventListener('input', function(){
+            incomePeriodValue.value = this.value*appData.budgetMonth;
+         });
+
     },
 
     // создаем метод, который добавляет новые поля
@@ -235,6 +244,11 @@ let appData = {
 };
 
 
+function myRange(){
+    periodAmount.innerHTML = this.value;  
+ }
+
+
 // прикрепляем обработчик событий кнопке "рассчитать" (buttonStart)
 buttonStart.addEventListener('click', appData.start);
 
@@ -242,3 +256,4 @@ buttonStart.addEventListener('click', appData.start);
 // по клику вызывается функция из appData.addExpensesBlock
 buttonPlus0.addEventListener('click', appData.addIncomeBlock);
 buttonPlus1.addEventListener('click', appData.addExpensesBlock);
+periodSelect.addEventListener('input', myRange);
