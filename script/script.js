@@ -32,10 +32,9 @@ let isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
-let budgetDay;
-
 let appData = {
     budget: 0,
+    budgetDay: 0,
     budgetMonth: 0,
     expensesMonth: 0,
     income: {},
@@ -50,24 +49,23 @@ let appData = {
     moneyDeposit: 0,
     // эта функция раньше была выше, до appData
     start: function() {
-
-        // говорим, что из инпута inputSalaryAmount нам нельзя получать пустую строку
-        if(inputSalaryAmount.value === ''){
-            alert('Ошибка! Поле "Месячный доход" должно быть заполнено!');
+        if (inputSalaryAmount.value.trim() === '') {
             return;
         }
+
+        // ПОЧЕМУ МОЖЕТ НЕ РАБОТАТЬ ЭТО?
+        // еще могу циклом написать
+        // но это ж, наверное, тоже не то?
+        // getbuttonStart: function(){
+        //     if (inputSalaryAmount === '') {
+        //         buttonStart.disabled;
+        //     }
+        // }
+        // appData.getbuttonStart();
+        
         
         // присваиваю значение инпута "месячный доход" в budget
         appData.budget = +inputSalaryAmount.value;
-        //console.log('inputSalaryAmount.value: ', inputSalaryAmount.value);
-
-        // тут надо вызвать метод getExpenses
-        // зачем? он же ниже
-        appData.getExpenses();
-
-
-        // было в строке "тут по очереди вызывать мои методы"
-
         appData.getExpenses();
         appData.getIncome();
         appData.getExpensesMonth();
@@ -86,7 +84,7 @@ let appData = {
         budgetMonthValue.value = appData.budgetMonth;
         // Округлить вывод дневного бюджета
         // budgetDayValue = (appData.budgetDay);
-        budgetDay.value = Math.floor(appData.getBudget());
+        budgetDayValue.value = Math.floor(appData.budgetDay);
         expensesMonthValue.value = appData.expensesMonth;
         additionalExpensesValue.value = appData.addExpenses.join(', ');
         additionalIncomeValue.value = appData.addIncome.join(', ');
@@ -211,11 +209,11 @@ let appData = {
     getStatusIncome: function(){
         if (appData.budgetDay >= 1200) {
             return ('У вас высокий уровень дохода');
-        } else if ((budgetDay >= 600) || (budgetDay <= 1200)) {
+        } else if ((appData.budgetDay >= 600) || (appData.budgetDay <= 1200)) {
             return ('У вас средний уровень дохода');
-        } else if (budgetDay <= 600) {
+        } else if (appData.budgetDay <= 600) {
             return ('К сожалению, у вас уровень дохода ниже среднего');
-        } else if (budgetDay <= 0) {
+        } else if (appData.budgetDay <= 0) {
             return ('Что-то пошло не так');
         }
     },
@@ -233,8 +231,9 @@ let appData = {
         // разобраться, почему в консоли не то
         // проверить еще раз в консоли
         return appData.budgetMonth * periodSelect.value;
-    }
+    },
 };
+
 
 // прикрепляем обработчик событий кнопке "рассчитать" (buttonStart)
 buttonStart.addEventListener('click', appData.start);
