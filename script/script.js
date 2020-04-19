@@ -26,7 +26,8 @@ let buttonStart = document.getElementById('start'),
  periodSelect = document.querySelector('.period-select'),
  incomeItem = document.querySelectorAll('.income-items'),
  periodAmount = document.querySelector('.period-amount'),
- typeText = document.querySelectorAll('input[type="text"]');
+ typeText = document.querySelectorAll('input[type="text"]'),
+ calculateForm = document.querySelector('.calc');
 
 // проверка на число
 let isNumber = function(n) {
@@ -68,6 +69,41 @@ let appData = {
         this.getTargetMonth();
         this.getStatusIncome();
         this.showResult();
+
+        let textInput = calculateForm.querySelectorAll('.data input[type="text"]');
+        let textData = Array.prototype.slice.call(textInput);
+
+        textData.forEach(function (input) {
+            input.setAttribute('readonly', true);
+        });
+        buttonStart.style.display = 'none';
+        buttonCancel.style.display = 'block';
+
+        periodSelect.addEventListener('input', this.showResult.bind(appData));
+    },
+
+    reset: function(){
+        let calcInputs = calculateForm.querySelectorAll('input');
+        let calcArray = Array.prototype.slice.call(calcInputs);
+        calcArray.forEach(function (input) {
+            input.value = '';
+            input.removeAttribute('readonly');
+        });
+        buttonStart.style.display = 'block';
+        buttonCancel.style.display = 'none';
+        buttonStart.disabled = true;
+        this.budget = 0;
+        this.budgetDay = 0;
+        this.budgetMonth = 0;
+        this.expensesMonth = 0;
+        this.income = {};
+        this.incomeMonth = 0;
+        this.addIncome = [];
+        this.expenses = {};
+        this.addExpenses = [];
+        this.deposit = false;
+        this.percentDeposit = 0;
+        this.moneyDeposit = 0;
     },
     
     // выводим результаты всех вычислений
@@ -118,35 +154,6 @@ let appData = {
         }
     },
 
-    block: function(){
-        typeText.forEach(function(item){
-            if (item.hasAttribute('disabled')) {
-                return;
-            } else {
-                item.toggleAttribute('disabled');
-            }
-            
-        });
-        buttonStart.style.display = 'none';
-        buttonCancel.setAttribute('style', 'display: inline');
-    },
-
-    reset: function(){
-        let allInput = document.querySelectorAll('input');
-        allInput.forEach(function(elem){
-            if (elem === periodSelect) {
-                elem.value = periodAmount.innerHTML = 1;
-            } else {
-            elem.value = '';
-            elem.removeAttribute('disabled');
-            }
-        }, this);
-        console.log(this); 
-
-        buttonCancel.style.display = 'none';
-        buttonStart.style.display = 'block';
-    },
-
     //необходимо получить все расходы и записать все значения в объект
     getExpenses: function(){
         expensesItems.forEach(function(item){
@@ -182,7 +189,7 @@ let appData = {
             item = item.trim();
             //каждый элемент внутри массива проверяем на пустоту
             if(item !== ''){
-                this.addExpenses.push(item);
+                appData.addExpenses.push(item);
             }
 
         });
