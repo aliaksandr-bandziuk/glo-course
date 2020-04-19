@@ -76,6 +76,11 @@ let appData = {
         textData.forEach(function (input) {
             input.setAttribute('readonly', true);
         });
+
+        // заблокировал кнопки "плюс" после нажания "рассчитать"
+        buttonPlus0.disabled = true;
+        buttonPlus1.disabled = true;
+
         buttonStart.style.display = 'none';
         buttonCancel.style.display = 'block';
 
@@ -104,6 +109,31 @@ let appData = {
         this.deposit = false;
         this.percentDeposit = 0;
         this.moneyDeposit = 0;
+
+        // возвращаем кнопки "плюс"
+        buttonPlus0.style.display = 'block';
+        buttonPlus1.style.display = 'block';
+
+        // теперь убираем инпуты лишние
+        //Получим их снова в коллекцию, переберем
+        //и если индекс не 0 - удалим. а именно...
+        // 1. снова получаем со страницы все элементы
+        incomeItem = document.querySelectorAll('.income-items');
+        incomeItem.forEach((item, index) => {
+            if(index !== 0){
+                item.remove();
+            }
+        });
+
+        expensesItems = document.querySelectorAll('.expenses-items')
+        expensesItems.forEach((item, index) => {
+            if(index !== 0){
+                item.remove();
+            }
+        });
+
+        periodSelect.value = 1;
+        periodAmount.textContent = 1;
     },
     
     // выводим результаты всех вычислений
@@ -128,7 +158,7 @@ let appData = {
     addExpensesBlock: function(){
         // эта функция будет получать блок с двумя инпутами
         // в обязательных расходах
-        let expensesItems = document.querySelectorAll('.expenses-items');
+        expensesItems = document.querySelectorAll('.expenses-items');
 
         // чтобы вставить элемент, нам нужен его родитель
         //console.log(expensesItem.parentNode);
@@ -146,10 +176,10 @@ let appData = {
 
     // Создать метод addIncomeBlock аналогичный addExpensesBlock
     addIncomeBlock: function(){
-        let additionalIncome = document.querySelectorAll('.additional_income');
-        let cloneAdditionalIncome = additionalIncome[0].cloneNode(true);
-        additionalIncome[0].parentNode.insertBefore(cloneAdditionalIncome, buttonPlus0);
-        if(additionalIncome.length === 2){
+        incomeItem = document.querySelectorAll('.income-items');
+        let cloneAdditionalIncome = incomeItem[0].cloneNode(true);
+        incomeItem[0].parentNode.insertBefore(cloneAdditionalIncome, buttonPlus0);
+        if(incomeItem.length === 2){
             buttonPlus0.style.display = 'none';
         }
     },
