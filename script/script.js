@@ -125,7 +125,7 @@ let appData = {
             }
         });
 
-        expensesItems = document.querySelectorAll('.expenses-items')
+        expensesItems = document.querySelectorAll('.expenses-items');
         expensesItems.forEach((item, index) => {
             if(index !== 0){
                 item.remove();
