@@ -1,6 +1,6 @@
 'use strict';
 
-let buttonStart = document.getElementById('start'),
+const buttonStart = document.getElementById('start'),
  buttonCancel = document.getElementById('cancel'),
  buttonPlus0 = document.getElementsByTagName('button')[0],
  buttonPlus1 = document.getElementsByTagName('button')[1],
@@ -18,37 +18,39 @@ let buttonStart = document.getElementById('start'),
  inputIncomeAmount = document.querySelector('.income-amount'),
  additionalIncomeItems = document.querySelector('.additional_income-item'),
  inputExpensesTitle = document.querySelector('.expenses-title'),
- expensesItems = document.querySelectorAll('.expenses-items'),
  // inputExpensesAmount = document.querySelector('.expenses-amount'),
  additionalIncome = document.querySelectorAll('.additional_income'),
  additionalExpensesItem = document.querySelector('.additional_expenses-item'),
  inputTargetAmount = document.querySelector('.target-amount'),
  periodSelect = document.querySelector('.period-select'),
- incomeItem = document.querySelectorAll('.income-items'),
  periodAmount = document.querySelector('.period-amount'),
  typeText = document.querySelectorAll('input[type="text"]'),
  calculateForm = document.querySelector('.calc');
 
+ let incomeItem = document.querySelectorAll('.income-items'),
+ expensesItems = document.querySelectorAll('.expenses-items');
+ 
 // проверка на число
-let isNumber = function(n) {
+const isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
-const AppData = function () {
-    
-    this.budget = 0;
-    this.budgetDay = 0;
-    this.budgetMonth = 0;
-    this.expensesMonth = 0;
-    this.income = {};
-    this.incomeMonth = 0;
-    this.addIncome = [];
-    this.expenses = {};
-    this.addExpenses = [];
-    this.deposit = false;
-    this.percentDeposit = 0;
-    this.moneyDeposit = 0;
-};
+class AppData {
+    consrtuctor(){
+        this.budget = 0;
+        this.budgetDay = 0;
+        this.budgetMonth = 0;
+        this.expensesMonth = 0;
+        this.income = {};
+        this.incomeMonth = 0;
+        this.addIncome = [];
+        this.expenses = {};
+        this.addExpenses = [];
+        this.deposit = false;
+        this.percentDeposit = 0;
+        this.moneyDeposit = 0;
+    }
+}
 
 AppData.prototype.check = function(){
     if (inputSalaryAmount.value.trim() === '') {
