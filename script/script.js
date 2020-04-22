@@ -291,21 +291,22 @@ AppData.prototype.calcSavedMoney = function(){
     return this.budgetMonth * periodSelect.value;
 };
 
-const appData = new AppData();
+AppData.prototype.eventsListeners = function() {
+    const _this = this;
+    // прикрепляем обработчик событий кнопке "рассчитать" (buttonStart)
+    // Привязать контекст вызова функции start к appData
+    buttonStart.addEventListener('click', _this.start.bind(_this));
+    buttonCancel.addEventListener('click', _this.reset.bind(_this));
+    buttonPlus0.addEventListener('click', _this.addIncomeBlock);
+    buttonPlus1.addEventListener('click', _this.addExpensesBlock);
+    periodSelect.addEventListener('input', myRange);
+};
 
+const appData = new AppData();
+appData.eventsListeners();
 
 
 function myRange(){
     periodAmount.innerHTML = this.value;  
  }
 
-AppData.prototype.eventsListeners = function() {
-    const _this = this;
-    // прикрепляем обработчик событий кнопке "рассчитать" (buttonStart)
-    // Привязать контекст вызова функции start к appData
-    buttonStart.addEventListener('click', _this.start.bind(appData));
-    buttonCancel.addEventListener('click', _this.reset.bind(appData));
-    buttonPlus0.addEventListener('click', _this.addIncomeBlock);
-    buttonPlus1.addEventListener('click', _this.addExpensesBlock);
-    periodSelect.addEventListener('input', myRange);
-};
