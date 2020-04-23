@@ -4,7 +4,6 @@ const buttonStart = document.getElementById("start"),
   buttonCancel = document.getElementById("cancel"),
   buttonPlus0 = document.getElementsByTagName("button")[0],
   buttonPlus1 = document.getElementsByTagName("button")[1],
-  inputDepositCheck = document.querySelector("#deposit-check"),
   additionalIncomeItem = document.querySelectorAll(".additional_income-item"),
   budgetDayValue = document.getElementsByClassName("budget_day-value")[0],
   budgetMonthValue = document.getElementsByClassName("budget_month-value")[0],
@@ -31,7 +30,11 @@ const buttonStart = document.getElementById("start"),
   periodSelect = document.querySelector(".period-select"),
   periodAmount = document.querySelector(".period-amount"),
   typeText = document.querySelectorAll('input[type="text"]'),
-  calculateForm = document.querySelector(".calc");
+  calculateForm = document.querySelector(".calc"),
+  depositCheck = document.getElementById("deposit-check"),
+  depositBank = document.querySelector('.deposit-bank'),
+  depositAmount = document.querySelector('.deposit-amount'),
+  depositPercent = document.querySelector('.deposit-percent');
 
   let incomeItem = document.querySelectorAll(".income-items"),
   expensesItems = document.querySelectorAll(".expenses-items");
@@ -77,6 +80,7 @@ class AppData {
     this.getAccumulatedMonth();
     this.getAddExpenses();
     this.getAddIncome();
+    this.getInfoDeposit();
     this.getBudget();
     this.getTargetMonth();
     this.getStatusIncome();
@@ -271,6 +275,13 @@ class AppData {
     this.budgetDay = this.budgetMonth / 30;
   }
 
+  getInfoDeposit() {
+    if (this.deposit) {
+      this.percentDeposit = depositPercent.value;
+      this.moneyDeposit = depositAmount.value;
+    }
+  }
+
   getBudget() {
     console.log(this.income);
     console.log(this.incomeMonth);
@@ -295,22 +306,25 @@ class AppData {
     }
   }
 
-  // этот метод записывает цифры по депозиту в 33 и 35 строки
-  getInfoDeposit() {
-    // если appData.deposit - это true
-    if (this.deposit) {
-      this.percentDeposit = +prompt(
-        "Какой годовой процент у вас по депозиту?",
-        10
-      );
-      this.moneyDeposit = +prompt("Какая сумма заложена?", 10000);
-    }
-  }
   //считаем, сколько заработаем за период (37 строка)
   calcSavedMoney() {
     // разобраться, почему в консоли не то
     // проверить еще раз в консоли
     return this.budgetMonth * periodSelect.value;
+  }
+
+  depositHandler(){
+    if(depositCheck.checked){
+      depositBank.style.display = 'inline-block';
+      depositAmount.style.display = 'inline-block';
+      this.deposit = true;
+    } else {
+      depositBank.style.display = 'none';
+      depositAmount.style.display = 'none';
+      depositBank.value = '';
+      depositAmount.value = '';
+      this.deposit = false;
+    }
   }
 
   eventsListeners() {
@@ -324,6 +338,7 @@ class AppData {
     periodSelect.addEventListener("input", () => {
       periodAmount.textContent = periodSelect.value;
     });
+    depositCheck.addEventListener('change', _this.depositHandler.bind(_this));
   }
 }
 
