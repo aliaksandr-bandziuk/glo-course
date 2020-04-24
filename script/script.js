@@ -314,7 +314,7 @@ class AppData {
     if (valueSelect === 'other') {
         depositPercent.style = 'display: inline-block';
         depositPercent.value = '';
-        depositPercent.addEventListener('blur', ()=>{
+        depositPercent.addEventListener( ()=>{
             if (depositPercent.value >= 100){
             alert('Не смешите программу))) Таких процентов не бывает');
             this.start.setAttribute('disabled', true);
