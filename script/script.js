@@ -314,25 +314,25 @@ class AppData {
     if (valueSelect === 'other') {
         depositPercent.style = 'display: inline-block';
         depositPercent.value = '';
-        depositPercent.addEventListener( ()=>{
+        depositPercent.addEventListener('blur', ()=>{
             if (depositPercent.value >= 100){
             alert('Не смешите программу))) Таких процентов не бывает');
-            this.start.setAttribute('disabled', true);
+            start.setAttribute('disabled', true);
             }
             if (depositPercent.value < 1){
               alert('Поищите более выгодный вклад');
-              this.start.setAttribute('disabled', true);
+              start.setAttribute('disabled', true);
               }
               if (!isNumber(depositPercent.value)){
                 alert('Введите число, а не буквы');
-                this.start.setAttribute('disabled', true);
+                start.setAttribute('disabled', true);
                 }
                 if (depositPercent.value === ''){
                   alert('Депозитов без процентов не бывает');
-                  this.start.setAttribute('disabled', true);
+                  start.setAttribute('disabled', true);
                   } 
             else  {
-                this.start.removeAttribute('disabled');
+                start.removeAttribute('disabled');
             }
         });
         
@@ -353,6 +353,7 @@ class AppData {
     } else {
       depositBank.style.display = 'none';
       depositAmount.style.display = 'none';
+      depositPercent.style.display = 'none';
       depositBank.value = '';
       depositAmount.value = '';
       this.deposit = false;
