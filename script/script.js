@@ -283,10 +283,8 @@ class AppData {
   }
 
   getBudget() {
-    console.log(this.income);
-    console.log(this.incomeMonth);
-
-    this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth;
+    const monthDeposit = this.moneyDeposit * (this.percentDeposit / 100);
+    this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth + monthDeposit;
     this.budgetDay = this.budgetMonth / 30;
   }
 
@@ -306,24 +304,59 @@ class AppData {
     }
   }
 
-  //считаем, сколько заработаем за период (37 строка)
   calcSavedMoney() {
-    // разобраться, почему в консоли не то
-    // проверить еще раз в консоли
     return this.budgetMonth * periodSelect.value;
   }
+
+  // надо узнать, какой банк пользователь выбрал
+  changePercent(){
+    const valueSelect = this.value;
+    if (valueSelect === 'other') {
+        depositPercent.style = 'display: inline-block';
+        depositPercent.value = '';
+        depositPercent.addEventListener('blur', ()=>{
+            if (depositPercent.value >= 100){
+            alert('Не смешите программу))) Таких процентов не бывает');
+            this.start.setAttribute('disabled', true);
+            }
+            if (depositPercent.value < 1){
+              alert('Поищите более выгодный вклад');
+              this.start.setAttribute('disabled', true);
+              }
+              if (!isNumber(depositPercent.value)){
+                alert('Введите число, а не буквы');
+                this.start.setAttribute('disabled', true);
+                }
+                if (depositPercent.value === ''){
+                  alert('Депозитов без процентов не бывает');
+                  this.start.setAttribute('disabled', true);
+                  } 
+            else  {
+                this.start.removeAttribute('disabled');
+            }
+        });
+        
+    } else {
+        depositPercent.value = valueSelect;
+        depositPercent.style.display = 'none';
+        
+        
+    }          
+}
 
   depositHandler(){
     if(depositCheck.checked){
       depositBank.style.display = 'inline-block';
       depositAmount.style.display = 'inline-block';
       this.deposit = true;
+      depositBank.addEventListener('change', this.changePercent);
     } else {
       depositBank.style.display = 'none';
       depositAmount.style.display = 'none';
       depositBank.value = '';
       depositAmount.value = '';
       this.deposit = false;
+      depositBank.removeEventListener('change', this.changePercent);
     }
   }
 
